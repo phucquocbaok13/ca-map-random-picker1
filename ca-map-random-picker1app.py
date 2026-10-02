@@ -1,5 +1,3 @@
-# ca-map-random-picker1
-random game
 import streamlit as st
 import random
 import time
@@ -78,7 +76,7 @@ with col2:
     st.subheader("📜 Đã bị chọn")
     if st.session_state.history:
         for idx, item in enumerate(st.session_state.history, 1):
-            st.write(f"**{idx}.** ☠️ {item}")
+            st.write(f"**{idx}.** ☠️️ {item}")
     else:
         st.caption("Chưa có lượt chọn nào.")
 
