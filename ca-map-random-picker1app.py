@@ -1,5 +1,3 @@
-import base64
-import os
 import random
 import time
 import streamlit as st
@@ -9,44 +7,35 @@ st.set_page_config(
     page_title="Cá Mập Chọn Người", page_icon="🦈", layout="centered"
 )
 
-
-# Hàm chuyển đổi ảnh cục bộ sang Base64 để hiển thị HTML/CSS
-def get_image_base64(image_path):
-    if os.path.exists(image_path):
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-    return None
+# Link ảnh cá mập đã làm sạch trực tuyến
+SHARK_URL = "https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop"
 
 
 # Hàm hiển thị hình ảnh cá mập có tên người chơi nằm trong vòm miệng
-def display_shark_with_player(name, image_path="shark.png"):
-    img_b64 = get_image_base64(image_path)
-    if img_b64:
-        html_code = f"""
-        <div style="position: relative; width: 100%; max-width: 480px; margin: 15px auto; text-align: center;">
-            <img src="data:image/png;base64,{img_b64}" style="width: 100%; height: auto; display: block; border-radius: 12px;">
-            <div style="
-                position: absolute;
-                top: 55%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 42%;
-                color: #FFEA00;
-                font-size: 26px;
-                font-weight: 900;
-                font-family: 'Arial', sans-serif;
-                text-align: center;
-                word-wrap: break-word;
-                line-height: 1.2;
-                text-shadow: 2px 2px 5px #000000, -2px -2px 5px #000000, 2px -2px 5px #000000, -2px 2px 5px #000000;
-            ">
-                {name}
-            </div>
+def display_shark_with_player(name):
+    html_code = f"""
+    <div style="position: relative; width: 100%; max-width: 480px; margin: 15px auto; text-align: center;">
+        <img src="{SHARK_URL}" style="width: 100%; height: auto; display: block; border-radius: 12px;">
+        <div style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            color: #FFEA00;
+            font-size: 28px;
+            font-weight: 900;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            word-wrap: break-word;
+            line-height: 1.2;
+            text-shadow: 2px 2px 6px #000000, -2px -2px 6px #000000, 2px -2px 6px #000000, -2px 2px 6px #000000;
+        ">
+            {name}
         </div>
-        """
-        st.markdown(html_code, unsafe_allow_html=True)
-    else:
-        st.warning("⚠️ Chưa tìm thấy file 'shark.png' trong thư mục GitHub!")
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
 
 
 # Giao diện tiêu đề
@@ -90,7 +79,7 @@ with col1:
     if st.session_state.players:
         st.info(" | ".join(st.session_state.players))
     else:
-        st.warning("⚠️️ Không còn ai trong danh sách!")
+        st.warning("⚠ Không còn ai trong danh sách!")
 
     # Lựa chọn chế độ
     mode = st.radio(
