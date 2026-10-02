@@ -108,7 +108,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- CÂU HỎI TOÁN HỌC ---
+# --- CÂU HỎI TOÁN HỌC (ĐÃ TÍCH HỢP PHÂN SỐ ĐẸP) ---
 MATH_DATA = {
     6: [
         {
@@ -123,7 +123,7 @@ MATH_DATA = {
             "ans": "27",
         },
         {
-            "q": "Chặng 4: Phân số nào bằng phân số 2/3?",
+            "q": r"Chặng 4: Phân số nào bằng phân số $\frac{2}{3}$?",
             "options": ["4/6", "5/6"],
             "ans": "4/6",
         },
@@ -134,7 +134,11 @@ MATH_DATA = {
             "options": ["-1", "-4"],
             "ans": "-1",
         },
-        {"q": "Chặng 2: Tìm x biết x / 4 = 3 / 2", "options": ["6", "12"], "ans": "6"},
+        {
+            "q": r"Chặng 2: Tìm x biết $\frac{x}{4} = \frac{3}{2}$", 
+            "options": ["6", "12"], 
+            "ans": "6"
+        },
         {
             "q": "Chặng 3: Tổng 3 góc trong tam giác bằng:",
             "options": ["180°", "360°"],
@@ -282,6 +286,7 @@ elif st.session_state.state == "PLAYING":
     questions = MATH_DATA[grade]
     current_q = questions[step]
 
+    # Streamlit sẽ tự động render các công thức toán LaTeX có trong câu hỏi
     st.markdown(f"### 🦈 TOÁN LỚP {grade} — {current_q['q']}")
 
     shark_bottom_pos = 8 + (step * 20)
@@ -392,90 +397,3 @@ elif st.session_state.state == "VICTORY":
         st.session_state.state = "HOME"
         st.session_state.step = 0
         st.rerun()
-# --- CÂU HỎI TOÁN HỌC ---
-MATH_DATA = {
-    6: [
-        {
-            "q": "Chặng 1: Tính giá trị: 15 + 25 : 5",
-            "options": ["20", "8"],
-            "ans": "20",
-        },
-        {"q": "Chặng 2: Tìm x biết x - 7 = 18", "options": ["25", "11"], "ans": "25"},
-        {
-            "q": "Chặng 3: Kết quả của phép tính 3³ là:",
-            "options": ["27", "9"],
-            "ans": "27",
-        },
-        {
-            "q": r"Chặng 4: Phân số nào bằng phân số $\frac{2}{3}$?",
-            "options": ["4/6", "5/6"],
-            "ans": "4/6",
-        },
-    ],
-    7: [
-        {
-            "q": "Chặng 1: Kết quả (-2,5) + 1,5 là:",
-            "options": ["-1", "-4"],
-            "ans": "-1",
-        },
-        {
-            "q": r"Chặng 2: Tìm x biết $\frac{x}{4} = \frac{3}{2}$", 
-            "options": ["6", "12"], 
-            "ans": "6"
-        },
-        {
-            "q": "Chặng 3: Tổng 3 góc trong tam giác bằng:",
-            "options": ["180°", "360°"],
-            "ans": "180°",
-        },
-        {
-            "q": "Chặng 4: Cho y = 3x. Khi x = 4 thì y bằng:",
-            "options": ["12", "7"],
-            "ans": "12",
-        },
-    ],
-    8: [
-        {
-            "q": "Chặng 1: Khai triển (x + 2)² - x² thu được:",
-            "options": ["4x + 4", "2x + 4"],
-            "ans": "4x + 4",
-        },
-        {
-            "q": "Chặng 2: Nghiệm của 2x - 8 = 0 là:",
-            "options": ["x = 4", "x = -4"],
-            "ans": "x = 4",
-        },
-        {
-            "q": "Chặng 3: Tam giác vuông có 2 cạnh góc vuông 3cm, 4cm. Cạnh huyền:",
-            "options": ["5 cm", "7 cm"],
-            "ans": "5 cm",
-        },
-        {
-            "q": "Chặng 4: Phân tích x² - 9 thành nhân tử:",
-            "options": ["(x-3)(x+3)", "(x-9)(x+1)"],
-            "ans": "(x-3)(x+3)",
-        },
-    ],
-    9: [
-        {
-            "q": "Chặng 1: Căn bậc hai số học của 81 là:",
-            "options": ["9", "-9"],
-            "ans": "9",
-        },
-        {
-            "q": "Chặng 2: Nghiệm x² - 5x + 6 = 0 là:",
-            "options": ["x=2; x=3", "x=-2; x=-3"],
-            "ans": "x=2; x=3",
-        },
-        {
-            "q": "Chặng 3: Tam giác vuông có cạnh đối 3, cạnh huyền 5. Sin góc:",
-            "options": ["0,6", "0,8"],
-            "ans": "0,6",
-        },
-        {
-            "q": "Chặng 4: Đồ thị y = 2x + 1 đi qua điểm:",
-            "options": ["(1, 3)", "(1, 2)"],
-            "ans": "(1, 3)",
-        },
-    ],
-}
