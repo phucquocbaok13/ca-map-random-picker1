@@ -286,12 +286,22 @@ elif st.session_state.state == "PLAYING":
     questions = MATH_DATA[grade]
     current_q = questions[step]
 
+    # --- LOGIC XÁO TRỘN ĐÁP ÁN NGẪU NHIÊN CHO MỖI CHẶNG ---
+    step_key = f"{grade}_{step}"
+    if "current_step_key" not in st.session_state or st.session_state.current_step_key != step_key:
+        opts = list(current_q["options"])
+        random.shuffle(opts) # Xáo trộn vị trí trái/phải
+        st.session_state.shuffled_opts = opts
+        st.session_state.current_step_key = step_key
+
+    opts = st.session_state.shuffled_opts
+
     # Streamlit sẽ tự động render các công thức toán LaTeX có trong câu hỏi
     st.markdown(f"### 🦈 TOÁN LỚP {grade} — {current_q['q']}")
 
     shark_bottom_pos = 8 + (step * 20)
 
-    # Dựng đường đua và vật cản ghép nối không chứa dòng thừa
+    # Dựng đường đua và vật cản ghép nối
     gates_html = ""
     for idx in range(4):
         top_pos = 70 - (idx * 20)
@@ -302,8 +312,8 @@ elif st.session_state.state == "PLAYING":
             opt_b = "ĐÃ QUA"
         elif idx == step:
             st_type = "active"
-            opt_a = current_q["options"][0]
-            opt_b = current_q["options"][1]
+            opt_a = opts[0]
+            opt_b = opts[1]
         else:
             st_type = "locked"
             opt_a = "🔒"
@@ -320,8 +330,6 @@ elif st.session_state.state == "PLAYING":
     # Nút bấm chọn cửa
     st.write("👉 **Chọn cánh cửa đúng để Cá Mập bơi qua:**")
     col_btn1, col_btn2 = st.columns(2)
-
-    opts = current_q["options"]
 
     with col_btn1:
         if st.button(
