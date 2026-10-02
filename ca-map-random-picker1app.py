@@ -9,6 +9,9 @@ st.set_page_config(
     layout="centered"
 )
 
+# Đường dẫn hình ảnh cá mập đớp (Sử dụng URL trực tiếp)
+SHARK_IMAGE_URL = "https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop"
+
 # Giao diện tiêu đề
 st.title("🦈 CÁ MẬP CHỌN NGƯỜI NGẪU NHIÊN")
 st.caption("Mini-game giải trí chọn người may mắn hoặc nhận thử thách / chịu phạt!")
@@ -28,11 +31,16 @@ if "players" not in st.session_state:
     st.session_state.players = [name.strip() for name in input_text.split("\n") if name.strip()]
 if "history" not in st.session_state:
     st.session_state.history = []
+if "last_chosen" not in st.session_state:
+    st.session_state.last_chosen = None
+if "last_mode" not in st.session_state:
+    st.session_state.last_mode = None
 
 # Nút cập nhật lại danh sách từ Sidebar
 if st.sidebar.button("🔄 Cập nhật danh sách", use_container_width=True):
     st.session_state.players = [name.strip() for name in input_text.split("\n") if name.strip()]
     st.session_state.history = []
+    st.session_state.last_chosen = None
     st.sidebar.success("Đã làm mới danh sách!")
 
 # Giao diện chính
@@ -63,20 +71,27 @@ with col1:
                 time.sleep(1.5)
 
             chosen = random.choice(st.session_state.players)
+            st.session_state.last_chosen = chosen
+            st.session_state.last_mode = mode
 
             if mode == "☠️ Cá mập 'xơi' dần (Loại trừ)":
                 st.session_state.players.remove(chosen)
                 st.session_state.history.append(chosen)
-                st.error(f"😱 **{chosen}** đã bị cá mập cắn trúng!")
-            else:
-                st.balloons()
-                st.success(f"🎉 Chúc mừng **{chosen}** đã được cá mập lựa chọn!")
+
+    # Hiển thị hình ảnh cá mập đớp và kết quả người bị chọn
+    if st.session_state.last_chosen:
+        st.image(SHARK_IMAGE_URL, caption="🦈 CHOMP! Cá mập đã ra đòn!", use_container_width=True)
+        if st.session_state.last_mode == "☠️ Cá mập 'xơi' dần (Loại trừ)":
+            st.error(f"😱 **{st.session_state.last_chosen}** đã bị cá mập cắn trúng!")
+        else:
+            st.balloons()
+            st.success(f"🎉 Chúc mừng **{st.session_state.last_chosen}** đã được cá mập lựa chọn!")
 
 with col2:
     st.subheader("📜 Đã bị chọn")
     if st.session_state.history:
         for idx, item in enumerate(st.session_state.history, 1):
-            st.write(f"**{idx}.** ☠️️ {item}")
+            st.write(f"**{idx}.** ☠️ {item}")
     else:
         st.caption("Chưa có lượt chọn nào.")
 
@@ -85,4 +100,5 @@ st.write("---")
 if st.button("🔄 Đặt lại trò chơi ban đầu"):
     st.session_state.players = [name.strip() for name in input_text.split("\n") if name.strip()]
     st.session_state.history = []
+    st.session_state.last_chosen = None
     st.rerun()
