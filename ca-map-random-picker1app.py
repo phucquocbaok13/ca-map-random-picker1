@@ -20,15 +20,16 @@ def play_sound(sound_url):
     st.markdown(sound_html, unsafe_allow_html=True)
 
 
-# --- KHAI BÁO CÁC ĐƯỜNG DẪN ÂM THANH (SFX) ---
+# --- KHAI BÁO CÁC ĐƯỜNG DẪN ÂM THANH (SFX & MUSIC) ---
+SOUND_HOME = "https://assets.mixkit.co/music/1113/1113.mp3"  # 🎵 Nhạc nền trang chủ
 SOUND_CORRECT = (
-    "https://assets.mixkit.co/active_storage/sfx/2870/2870.wav"
+    "https://assets.mixkit.co/active_storage/sfx/2870/2870.wav"  # 🔔 Khi chọn ĐÚNG
 )
 SOUND_GAMEOVER = (
-    "https://assets.mixkit.co/active_storage/sfx/948/948.wav"
+    "https://assets.mixkit.co/active_storage/sfx/948/948.wav"  # ❌ Khi chọn SAI
 )
 SOUND_VICTORY = (
-    "https://assets.mixkit.co/active_storage/sfx/2012/2012.wav"
+    "https://assets.mixkit.co/active_storage/sfx/2012/2012.wav"  # 🏆 Khi CHIẾN THẮNG
 )
 
 
@@ -263,6 +264,8 @@ def draw_shark_trophy():
 # 1. TRANG CHỦ (HOME)
 # ==========================================
 if st.session_state.state == "HOME":
+    play_sound(SOUND_HOME)  # 🔊 Phát nhạc nền Trang chủ
+
     st.markdown(
         '<div class="title-container"><div class="main-title">🦈 CÁ MẬP GIẢI TOÁN 🦈</div><div class="orbit-shark"><svg width="50" height="50" viewBox="0 0 100 100"><path d="M 20 50 Q 50 20 80 50 Q 50 80 20 50 Z" fill="#00E5FF"/><polygon points="80,50 65,40 65,60" fill="#00E5FF"/><circle cx="35" cy="45" r="4" fill="#000"/></svg></div></div>',
         unsafe_allow_html=True,
@@ -363,7 +366,7 @@ elif st.session_state.state == "PLAYING":
             f"🚪 CỬA TRÁI: {opts[0]}", key="door_a", use_container_width=True
         ):
             if opts[0] == current_q["ans"]:
-                play_sound(SOUND_CORRECT)  # 🔊Âm thanh trả lời đúng
+                play_sound(SOUND_CORRECT)  # 🔊 Âm thanh trả lời đúng
                 st.balloons()
                 st.success("🎉 ĐÚNG RỒI! Cá mập đã húc vỡ cửa tiến lên!")
                 time.sleep(0.8)
@@ -381,7 +384,7 @@ elif st.session_state.state == "PLAYING":
             f"🚪 CỬA PHẢI: {opts[1]}", key="door_b", use_container_width=True
         ):
             if opts[1] == current_q["ans"]:
-                play_sound(SOUND_CORRECT)  # 🔊Âm thanh trả lời đúng
+                play_sound(SOUND_CORRECT)  # 🔊 Âm thanh trả lời đúng
                 st.balloons()
                 st.success("🎉 ĐÚNG RỒI! Cá mập đã húc vỡ cửa tiến lên!")
                 time.sleep(0.8)
@@ -398,7 +401,7 @@ elif st.session_state.state == "PLAYING":
 # 3. MÀN HÌNH GAME OVER
 # ==========================================
 elif st.session_state.state == "GAME_OVER":
-    play_sound(SOUND_GAMEOVER)  # 🔊Âm thanh thua cuộc
+    play_sound(SOUND_GAMEOVER)  # 🔊 Âm thanh thua cuộc
 
     st.markdown(
         '<div style="text-align: center; padding: 30px;"><h1 style="color: #FF1744; font-size: 52px; text-shadow: 0 0 20px #FF1744;">☠️ GAME OVER ☠️</h1><h3 style="color: #FFF;">Cá mập đã chọn sai cửa và va phải vật cản!</h3></div>',
@@ -416,7 +419,7 @@ elif st.session_state.state == "GAME_OVER":
 # 4. MÀN HÌNH CHIẾN THẮNG (VICTORY)
 # ==========================================
 elif st.session_state.state == "VICTORY":
-    play_sound(SOUND_VICTORY)  # 🔊Âm thanh chiến thắng
+    play_sound(SOUND_VICTORY)  # 🔊 Âm thanh chiến thắng
 
     st.snow()
     st.markdown(
