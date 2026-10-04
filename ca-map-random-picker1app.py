@@ -7,6 +7,31 @@ st.set_page_config(
     page_title="Cá Mập Giải Toán", page_icon="🦈", layout="centered"
 )
 
+
+# --- HÀM PHÁT ÂM THANH BẰNG HTML5 ---
+def play_sound(sound_url):
+    """Nhúng thẻ audio ẩn tự động phát âm thanh từ đường dẫn URL."""
+    sound_html = f"""
+        <iframe src="{sound_url}" allow="autoplay" style="display:none"></iframe>
+        <audio autoplay style="display:none;">
+            <source src="{sound_url}" type="audio/mpeg">
+        </audio>
+    """
+    st.markdown(sound_html, unsafe_allow_html=True)
+
+
+# --- KHAI BÁO CÁC ĐƯỜNG DẪN ÂM THANH (SFX) ---
+SOUND_CORRECT = (
+    "https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+)
+SOUND_GAMEOVER = (
+    "https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
+)
+SOUND_VICTORY = (
+    "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"
+)
+
+
 # CSS Tùy chỉnh Giao diện Mobile Runner
 st.markdown(
     """
@@ -108,7 +133,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- CÂU HỎI TOÁN HỌC (ĐÃ TÍCH HỢP PHÂN SỐ ĐẸP) ---
+# --- CÂU HỎI TOÁN HỌC ---
 MATH_DATA = {
     6: [
         {
@@ -135,9 +160,9 @@ MATH_DATA = {
             "ans": "-1",
         },
         {
-            "q": r"Chặng 2: Tìm x biết $\frac{x}{4} = \frac{3}{2}$", 
-            "options": ["6", "12"], 
-            "ans": "6"
+            "q": r"Chặng 2: Tìm x biết $\frac{x}{4} = \frac{3}{2}$",
+            "options": ["6", "12"],
+            "ans": "6",
         },
         {
             "q": "Chặng 3: Tổng 3 góc trong tam giác bằng:",
@@ -288,15 +313,17 @@ elif st.session_state.state == "PLAYING":
 
     # --- LOGIC XÁO TRỘN ĐÁP ÁN NGẪU NHIÊN CHO MỖI CHẶNG ---
     step_key = f"{grade}_{step}"
-    if "current_step_key" not in st.session_state or st.session_state.current_step_key != step_key:
+    if (
+        "current_step_key" not in st.session_state
+        or st.session_state.current_step_key != step_key
+    ):
         opts = list(current_q["options"])
-        random.shuffle(opts) # Xáo trộn vị trí trái/phải
+        random.shuffle(opts)
         st.session_state.shuffled_opts = opts
         st.session_state.current_step_key = step_key
 
     opts = st.session_state.shuffled_opts
 
-    # Streamlit sẽ tự động render các công thức toán LaTeX có trong câu hỏi
     st.markdown(f"### 🦈 TOÁN LỚP {grade} — {current_q['q']}")
 
     shark_bottom_pos = 8 + (step * 20)
@@ -336,6 +363,7 @@ elif st.session_state.state == "PLAYING":
             f"🚪 CỬA TRÁI: {opts[0]}", key="door_a", use_container_width=True
         ):
             if opts[0] == current_q["ans"]:
+                play_sound(SOUND_CORRECT)  # 🔊Âm thanh trả lời đúng
                 st.balloons()
                 st.success("🎉 ĐÚNG RỒI! Cá mập đã húc vỡ cửa tiến lên!")
                 time.sleep(0.8)
@@ -353,6 +381,7 @@ elif st.session_state.state == "PLAYING":
             f"🚪 CỬA PHẢI: {opts[1]}", key="door_b", use_container_width=True
         ):
             if opts[1] == current_q["ans"]:
+                play_sound(SOUND_CORRECT)  # 🔊Âm thanh trả lời đúng
                 st.balloons()
                 st.success("🎉 ĐÚNG RỒI! Cá mập đã húc vỡ cửa tiến lên!")
                 time.sleep(0.8)
@@ -369,6 +398,8 @@ elif st.session_state.state == "PLAYING":
 # 3. MÀN HÌNH GAME OVER
 # ==========================================
 elif st.session_state.state == "GAME_OVER":
+    play_sound(SOUND_GAMEOVER)  # 🔊Âm thanh thua cuộc
+
     st.markdown(
         '<div style="text-align: center; padding: 30px;"><h1 style="color: #FF1744; font-size: 52px; text-shadow: 0 0 20px #FF1744;">☠️ GAME OVER ☠️</h1><h3 style="color: #FFF;">Cá mập đã chọn sai cửa và va phải vật cản!</h3></div>',
         unsafe_allow_html=True,
@@ -385,6 +416,8 @@ elif st.session_state.state == "GAME_OVER":
 # 4. MÀN HÌNH CHIẾN THẮNG (VICTORY)
 # ==========================================
 elif st.session_state.state == "VICTORY":
+    play_sound(SOUND_VICTORY)  # 🔊Âm thanh chiến thắng
+
     st.snow()
     st.markdown(
         '<div style="text-align: center; padding: 20px;"><h1 style="color: #FFD700; font-size: 40px; text-shadow: 0 0 20px #FFD700;">🏆 BẠN ĐÃ CHIẾN THẮNG! 🏆</h1><h3>Chúc mừng bạn đã giúp Cá Mập vượt qua cả 4 vật cản xuất sắc!</h3></div>',
