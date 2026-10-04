@@ -22,13 +22,13 @@ def play_sound(sound_url):
 
 # --- KHAI BÁO CÁC ĐƯỜNG DẪN ÂM THANH (SFX) ---
 SOUND_CORRECT = (
-    "https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+    "https://assets.mixkit.co/active_storage/sfx/2870/2870.wav"
 )
 SOUND_GAMEOVER = (
-    "https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
+    "https://assets.mixkit.co/active_storage/sfx/948/948.wav"
 )
 SOUND_VICTORY = (
-    "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"
+    "https://assets.mixkit.co/active_storage/sfx/2012/2012.wav"
 )
 
 
