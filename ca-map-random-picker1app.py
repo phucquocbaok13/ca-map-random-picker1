@@ -8,13 +8,19 @@ st.set_page_config(
 )
 
 
-# --- HÀM PHÁT ÂM THANH BẰNG HTML5 ---
-def play_sound(sound_url):
-    """Nhúng thẻ audio ẩn tự động phát âm thanh từ đường dẫn URL."""
+# --- HÀM PHÁT ÂM THANH BẰNG HTML5 (ĐÃ CẢI TIẾN) ---
+def play_sound(sound_url, loop=False):
+    """Nhúng thẻ audio ẩn tự động phát âm thanh từ đường dẫn URL.
+    Thêm timestamp để tạo HTML duy nhất mỗi lần gọi, ép Streamlit & Trình duyệt phát lại âm thanh.
+    """
+    loop_attr = "loop" if loop else ""
+    # Tạo URL duy nhất bằng timestamp để bypass cache trình duyệt
+    unique_url = f"{sound_url}?t={int(time.time() * 1000)}"
+
     sound_html = f"""
-        <iframe src="{sound_url}" allow="autoplay" style="display:none"></iframe>
-        <audio autoplay style="display:none;">
-            <source src="{sound_url}" type="audio/mpeg">
+        <iframe src="{unique_url}" allow="autoplay" style="display:none"></iframe>
+        <audio autoplay {loop_attr} style="display:none;">
+            <source src="{unique_url}" type="audio/mpeg">
         </audio>
     """
     st.markdown(sound_html, unsafe_allow_html=True)
@@ -264,7 +270,7 @@ def draw_shark_trophy():
 # 1. TRANG CHỦ (HOME)
 # ==========================================
 if st.session_state.state == "HOME":
-    play_sound(SOUND_HOME)  # 🔊 Phát nhạc nền Trang chủ
+    play_sound(SOUND_HOME, loop=True)  # 🔊 Phát nhạc nền Trang chủ (có lặp lại)
 
     st.markdown(
         '<div class="title-container"><div class="main-title">🦈 CÁ MẬP GIẢI TOÁN 🦈</div><div class="orbit-shark"><svg width="50" height="50" viewBox="0 0 100 100"><path d="M 20 50 Q 50 20 80 50 Q 50 80 20 50 Z" fill="#00E5FF"/><polygon points="80,50 65,40 65,60" fill="#00E5FF"/><circle cx="35" cy="45" r="4" fill="#000"/></svg></div></div>',
